@@ -21,6 +21,7 @@ class UsuarioModel(db.Model):
     cpf = db.Column(db.String(14))
     cnpj = db.Column(db.String(20))
     servicos_cadastrados = db.relationship('ServicosCadastradosModel', lazy='dynamic')
+    contratos = db.relationship('ContratoModel', lazy='dynamic')
 
     #tipo, endereco, cidade, cep, telefoneFixo1, telefoneFixo2, celular1, celular2, foto, situacao, in_pf_pf, cpf, cnpj
     def __init__(self,nome, email, senha):
