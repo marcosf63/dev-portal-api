@@ -2,4 +2,4 @@
 
 ## Disciplina Laboratorio de Desenvolvimento de Software
 
-### Professor Tale
+### Professor Thalles
