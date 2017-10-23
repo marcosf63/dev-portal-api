@@ -1,0 +1,31 @@
+from db import db
+
+class ServicoModel(db.Model):
+
+    __tablename__ = 'servicos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(80))
+    categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.id'))
+    categoria = db.relationship('CategoriasModel')
+
+
+    def __init__(self, nome, categoria_id):
+        self.nome = nome
+        self.categoria_id = categoria_id
+
+    def json(self):
+        return {'nome': self.nome }
+
+    @classmethod
+    def buscar_por_name(cls, nome):
+        return cls.query.filter_by(nome=nome).first()
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+        
