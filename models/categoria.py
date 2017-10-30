@@ -16,7 +16,11 @@ class CategoriaModel(db.Model):
         return {'name': self.nome, 'servicos': [ servico.json() for servico in self.servicos.all()]}
 
     @classmethod
-    def buscar_por_name(cls, nome):
+    def buscar_por_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
+
+    @classmethod
+    def buscar_por_nome(cls, nome):
         return cls.query.filter_by(nome=nome).first()
 
     def save_to_db(self):

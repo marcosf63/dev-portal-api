@@ -7,8 +7,7 @@ class ServicoModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(80))
     categoria_id = db.Column(db.Integer, db.ForeignKey('categorias.id'))
-    categoria = db.relationship('CategoriasModel')
-    buscas = db.relationship('BuscaModel', lazy='dynamic')
+    categoria = db.relationship('CategoriaModel')
 
 
     def __init__(self, nome, categoria_id):
@@ -18,11 +17,12 @@ class ServicoModel(db.Model):
     def json(self):
         return {'nome': self.nome }
 
-    def json2(self):
-        return {'nome': self.nome , 'buscas': [busca.json for busca in self.buscas.all()] }
+    @classmethod
+    def buscar_por_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
 
     @classmethod
-    def buscar_por_name(cls, nome):
+    def buscar_por_nome(cls, nome):
         return cls.query.filter_by(nome=nome).first()
 
     def save_to_db(self):

@@ -1,34 +1,36 @@
-from flask_restful import Resource
+#-*- coding: utf8 -*-
+from flask_restful import Resource, request
 from models.categoria import CategoriaModel
 
-class Store(Resource):
-    def get(self, name):
-        store = StoreModel.find_by_name(name)
-        if store:
-            return store.json()
-        return {'message': "Store nao encontrada."}, 404
+class Categoria(Resource):
+    def get(self, _id):
+        categoria = CategoriaModel.buscar_por_id(_id)
+        if categoria:
+            return categoria.json()
+        return {'mensagem': "Categoria não encontrada."}, 404
 
-    def post(self, name):
-        if StoreModel.find_by_name(name):
-            return {'message': "Store '{}' ja existe.".format(name)}, 400
+    def delete(self, _id):
+       categoria = CategoriaModel.buscar_por_id(_id)
+       if categoria:
+           categoria.delete_from_db()
 
-        store = StoreModel(name)
+       return {'mensagem': "Categoria deletada com sucesso"}
+
+class CategoriaRegister(Resource):
+    def post(self):
+        data = request.get_json()
+        if CategoriaModel.buscar_por_nome(data['nome']):
+            return {'message': "Store '{}' ja existe.".format(data['nome'])}, 400
+
+        categoria = CategoriaModel(**data)
 
         try:
-            store.save_to_db()
+            categoria.save_to_db()
         except:
-            return {"message": "Um erro cocorreu ao criar uma store"}, 500
+            return {"message": "Um erro cocorreu ao criar uma categoria"}, 500
 
-        return store.json(), 201
+        return categoria.json(), 201
 
-
-    def delete(self, name):
-       store = StoreModel.find_by_name(name)
-       if store:
-           store.delete_from_db()
-
-       return {'message': "Store deletado com sucesso"}
-
-class StoreList(Resource):
+class CategoriaList(Resource):
     def get(self):
-        return {'stores': [store.json() for store in StoreModel.query.all()]}
+        return {'categorias': [categoria.json() for categoria in CategoriaModel.query.all()]}

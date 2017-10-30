@@ -1,3 +1,5 @@
 .vscode/
 *.pyc
 *.db
+.DS_Store
+modelos_temp/
