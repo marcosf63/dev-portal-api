@@ -22,7 +22,7 @@ class ServicoRegister(Resource):
         if ServicoModel.buscar_por_nome(data['nome']):
             return {'message': "Serviço '{}' já existe.".format(data['nome'])}, 400
 
-        servico = ServicoModel(**data)
+        servico = ServicoModel(**data   )
 
         try:
             servico.save_to_db()

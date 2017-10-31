@@ -3,9 +3,14 @@ from flask_restful import Api
 from flask_jwt import JWT
 
 #from security import authenticate, identity
-#from resources.usuario import UsuarioRegister, Usuario, UsuarioList
+from resources.usuario import UsuarioRegister, Usuario, UsuarioList
+#from models.usuario import UsuarioModel
+from models.contrato import ContratoModel
+from models.plano import PlanoModel
+from models.servicos_cadastrados import ServicosCadastradosModel
 from resources.servico import ServicoRegister, Servico, ServicoList
 from resources.categoria import Categoria, CategoriaList, CategoriaRegister
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -26,9 +31,9 @@ def initdb():
 
 #jwt = JWT(app, authenticate, identity)
 
-#api.add_resource(UsuarioRegister, '/register')
-#api.add_resource(Usuario, '/usuario/<int:id>')
-#api.add_resource(UsuarioList, '/usuarios' )
+api.add_resource(UsuarioRegister, '/register')
+api.add_resource(Usuario, '/usuario/<int:_id>')
+api.add_resource(UsuarioList, '/usuarios' )
 api.add_resource(CategoriaRegister, '/categoria')
 api.add_resource(Categoria, '/categoria/<int:_id>')
 api.add_resource(CategoriaList, '/categorias')

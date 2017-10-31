@@ -22,7 +22,7 @@ class CategoriaModel(db.Model):
     @classmethod
     def buscar_por_nome(cls, nome):
         return cls.query.filter_by(nome=nome).first()
-
+ 
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
