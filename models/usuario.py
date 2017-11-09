@@ -105,4 +105,8 @@ class UsuarioModel(db.Model):
     def buscar_por_tipo(cls, tipo):
         return cls.query.filter_by(tipo=tipo).all()
 
+    @classmethod
+    def buscar_por_situacao(cls, situacao):
+        return cls.query.filter_by(situacao=situacao).all()
+
 

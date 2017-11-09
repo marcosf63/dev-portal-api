@@ -22,11 +22,25 @@ class PlanoModel(db.Model):
         self.valor = valor
 
     def json(self):
-        return {'nome': self.nome, 'contratos': [ contrato.json() for contrato in self.contratos.all()]}
+        return {'id': self.id,
+                'nome': self.nome, 
+                "descricao": self.descricao, 
+                "qt_servico": self.qt_servico, 
+                "periodicidade": self.periodicidade, 
+                "valor": self.valor}
 
     @classmethod
-    def buscar_por_name(cls, nome):
+    def buscar_por_nome(cls, nome):
         return cls.query.filter_by(nome=nome).first()
+
+    @classmethod
+    def buscar_por_id(cls, _id):
+        return cls.query.filter_by(id=_id).first()
+
+    @classmethod
+    def buscar_por_parte_do_nome(cls, nome):
+        str = nome + "%"
+        return cls.query.filter(cls.nome.like(str)).all()
 
     def save_to_db(self):
         db.session.add(self)

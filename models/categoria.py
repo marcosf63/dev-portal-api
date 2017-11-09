@@ -13,7 +13,7 @@ class CategoriaModel(db.Model):
         self.nome = nome
 
     def json(self):
-        return {'name': self.nome, 'servicos': [ servico.json() for servico in self.servicos.all()]}
+        return {'id': self.id, 'name': self.nome, 'servicos': [ servico.json() for servico in self.servicos.all()]}
 
     @classmethod
     def buscar_por_id(cls, _id):

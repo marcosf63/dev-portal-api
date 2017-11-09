@@ -16,6 +16,16 @@ class Usuario(Resource):
 
        return {'mensagem': "usuario deletada com sucesso"}
 
+    def put(self, _id):
+       data = request.get_json()
+       usuario = UsuarioModel.buscar_por_id(_id)
+       if usuario:
+           usuario.situacao = data['situacao']
+           usuario.save_to_db()
+           return usuario.json()
+
+       return {'mensagem': "Serviço não encontrado."}
+
 class UsuarioRegister(Resource):
     def post(self):
         data = request.get_json()
@@ -34,6 +44,10 @@ class UsuarioRegister(Resource):
 class UsuarioList(Resource):
     def get(self):
         tipo = request.args.get('tipo')
+        situacao = request.args.get('situacao')
         if tipo:
             return {'usuarios': [usuario.json() for usuario in UsuarioModel.buscar_por_tipo(tipo)]}
+
+        if situacao:
+            return {'usuarios': [usuario.json() for usuario in UsuarioModel.buscar_por_situacao(situacao)]}
         return {'usuarios': [usuario.json() for usuario in UsuarioModel.query.all()]}

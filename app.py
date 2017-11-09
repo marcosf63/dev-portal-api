@@ -1,24 +1,39 @@
 from flask import Flask
 from flask_restful import Api
-from flask_jwt import JWT
+from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
-#from security import authenticate, identity
 from resources.usuario import UsuarioRegister, Usuario, UsuarioList
-#from models.usuario import UsuarioModel
+from models.pagamento import PagamentoModel
 from models.contrato import ContratoModel
 from models.plano import PlanoModel
-from models.servicos_cadastrados import ServicosCadastradosModel
-from resources.servico import ServicoRegister, Servico, ServicoList
+from resources.servico import ServicoRegister, Servico, ServicoList, ServicoQuery
 from resources.categoria import Categoria, CategoriaList, CategoriaRegister
+from resources.servicos_cadastrados import ServicosCadastrados, ServicosCadastradosRegister, ServicosCadastradosList
+from resources.plano import Plano, PlanoList, PlanoRegister
+from resources.contrato import Contrato, ContratoList, ContratoRegister
+from resources.pagamento import (
+  Pagamento,
+  PagamentoQuery,
+  PagamentoRegister,
+  PagamentoList
+)
+from resources.busca import Busca, BuscaList, BuscaRegister
+from resources.servicos_prestados import ServicosPrestados
+from resources.servicos_prestados import ServicosPrestadosRegister
+from resources.servicos_prestados import ServicosPrestadosList
+from resources.auth import UsuarioAuth
 
 
 app = Flask(__name__)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['PROPAGATE_EXCEPTIONS'] = True # To allow flask propagating exception even if debug is set to false on app
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
-app.config['JWT_AUTH_PASSWORD_KEY'] = 'senha'
-app.secret_key = 'marcos'
+#app.config['JWT_AUTH_USERNAME_KEY'] = 'email'
+#app.config['JWT_AUTH_PASSWORD_KEY'] = 'senha'
+app.config['JWT_SECRET_KEY'] = 'marcos'
+jwt = JWTManager(app)
 api = Api(app)
 
 
@@ -40,6 +55,27 @@ api.add_resource(CategoriaList, '/categorias')
 api.add_resource(ServicoRegister, '/servico')
 api.add_resource(Servico, '/servico/<int:_id>')
 api.add_resource(ServicoList, '/servicos')
+api.add_resource(PlanoRegister, '/plano')
+api.add_resource(Plano, '/plano/<int:_id>')
+api.add_resource(PlanoList, '/planos')
+api.add_resource(ContratoRegister, '/contrato')
+api.add_resource(Contrato, '/contrato/<int:_id>')
+api.add_resource(ContratoList, '/contratos')
+api.add_resource(PagamentoRegister, '/pagamento')
+api.add_resource(Pagamento, '/pagamento/<int:_id>')
+api.add_resource(PagamentoList, '/pagamentos')
+api.add_resource(PagamentoQuery, '/pagamento')
+api.add_resource(BuscaRegister, '/busca')
+api.add_resource(Busca, '/busca/<int:_id>')
+api.add_resource(BuscaList, '/buscas')
+api.add_resource(ServicosPrestadosRegister, '/servico_prestado')
+api.add_resource(ServicosPrestados, '/servico_prestado/<int:_id>')
+api.add_resource(ServicosPrestadosList, '/servicos_prestados')
+api.add_resource(ServicosCadastradosRegister, '/servico_cadastrado')
+api.add_resource(ServicosCadastrados, '/servico_cadastrado/<int:_id>')
+api.add_resource(ServicosCadastradosList, '/servicos_cadastrados')
+api.add_resource(UsuarioAuth, '/auth')
+api.add_resource(ServicoQuery, '/servico')
 
 if __name__ == '__main__':
   from db import db

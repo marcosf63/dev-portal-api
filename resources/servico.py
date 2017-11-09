@@ -19,10 +19,8 @@ class Servico(Resource):
 class ServicoRegister(Resource):
     def post(self):
         data = request.get_json()
-        if ServicoModel.buscar_por_nome(data['nome']):
-            return {'message': "Serviço '{}' já existe.".format(data['nome'])}, 400
 
-        servico = ServicoModel(**data   )
+        servico = ServicoModel(**data)
 
         try:
             servico.save_to_db()
@@ -30,6 +28,28 @@ class ServicoRegister(Resource):
             return {"message": "Um erro cocorreu ao criar uma categoria"}, 500
 
         return servico.json(), 201
+
+class ServicoQuery(Resource):
+    """
+      Para fazer busca em pagamentos do tipos /servico?categoria_id=1
+    """
+    def get(self):
+        categoria_id = request.args.get('categoria_id')
+        if categoria_id:
+            servicos = ServicoModel.buscar_por_categoria(categoria_id)
+            if servicos:
+                return [servico.json() for servico in servicos]
+            return {"mensagem": "Servicos não encontrados."}, 404
+        
+        nome = request.args.get('nome')
+        if nome:
+            servico = ServicoModel.buscar_por_nome(nome)
+            if servico:
+                return servico.json()
+            return {"mensagem": "Servico não encontrado."}, 404
+
+        return {"mensagem": "Informe algum parametro para consulta da categoria."}, 400
+       
 
 class ServicoList(Resource):
     def get(self):
